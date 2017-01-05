@@ -1,3 +1,13 @@
+function run_scripts -d 'run all scripts in a directory'
+	set -l _PREFIX $PATH[1]/..
+	set -l _CONDA_D (echo $_PREFIX/etc/conda/$argv[1].d)
+	if test -d $_CONDA_D
+		for fn in (find $_CONDA_D -name "*.sh")
+			source $fn
+		end
+	end
+end
+
 function condalist -d 'List conda environments.'
   for dir in (ls $HOME/miniconda3/envs)
     echo $dir
@@ -49,6 +59,8 @@ function condactivate -d 'Activate a conda environment' -a cenv
 
   # flag for whether a conda environment has been set
   set -xg __CONDA_ENV_ACTIVE 'true'
+
+  run_scripts "activate"
 end
 
 function deactivate -d 'Deactivate a conda environment'
@@ -66,6 +78,7 @@ function deactivate -d 'Deactivate a conda environment'
     #functions -e __original_fish_prompt
     set -e __CONDA_ENV_ACTIVE
   end
+  run_scripts "deactivate"
 end
 
 

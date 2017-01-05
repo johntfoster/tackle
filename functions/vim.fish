@@ -1,3 +1,3 @@
-function vi
+function vim
     /usr/local/bin/vim $argv
 end
